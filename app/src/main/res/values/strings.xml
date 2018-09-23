@@ -12,6 +12,7 @@
     <string name="Password">Password</string>
     <string name="firstname">Firstname</string>
     <string name="lastname">Lastname</string>
+    <string name="numero">Numero</string>
     <string name="repeat_password">retaper password</string>
     <string name="go">Connexion</string>
     <string name="register">Inscription</string>

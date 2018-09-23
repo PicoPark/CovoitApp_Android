@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,11 +25,14 @@ import android.widget.Toast;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pico.covoitapp.BusinessLogic.UserManager;
 import pico.covoitapp.Model.Api.User;
 import pico.covoitapp.R;
+import pico.covoitapp.Utils.ImageManager;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -51,6 +55,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText edit_firstname;
     @BindView(R.id.edit_lastname)
     EditText edit_lastname;
+    @BindView(R.id.edit_numero)
+    EditText edit_numero;
 
 
     private StorageReference mStorageRef;
@@ -72,9 +78,6 @@ public class RegisterActivity extends AppCompatActivity {
                 animateRevealClose();
             }
         });
-
-
-
 
         bt_go.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,15 +177,31 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void addUer(){
 
-        Toast.makeText(getApplicationContext(),"Nous avons besoin d'une photo de profil",Toast.LENGTH_SHORT).show();
+        if(img.getDrawable().equals(getApplicationContext().getDrawable(R.drawable.user)){
+            Toast.makeText(getApplicationContext(),"Nous avons besoin d'une photo de profil",Toast.LENGTH_SHORT).show();
 
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+        }else{
+            UserManager registerUser = new UserManager(this,this);
+            User user = new User();
+
+            user.setEmail(edit_email.getText().toString());
+            user.setFirstname(edit_firstname.getText().toString());
+            user.setLastname(edit_lastname.getText().toString());
+            user.setPassword(edit_password.getText().toString());
+            user.setPhone(edit_numero.getText().toString());
+
+          //  Uri.fromFile(new File( ))
+
+        //    ImageManager.getInstance().uploadImage(img.get);
+
+        }
 
 
 
-        UserManager registerUser = new UserManager(this,this);
-        User user = new User();
+
 
 
 
@@ -195,6 +214,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             img.setImageBitmap(photo);
+
         }
     }
 
