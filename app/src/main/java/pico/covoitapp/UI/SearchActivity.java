@@ -70,13 +70,13 @@ public class SearchActivity extends AppCompatActivity implements ICovoiturage{
         searchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                int day = dp.getDayOfMonth();
-                int month = dp.getMonth() + 1;
-                int year = dp.getYear();
-                String date = day + "/"+ month+"/"+year;
-                RetrofitHelper.getAllCovoiturages(edDepart.getText().toString(),
-                        edArrive.getText().toString(), date,
-                        ctx );
+               // int day = dp.getDayOfMonth();
+               // int month = dp.getMonth() + 1;
+               // int year = dp.getYear();
+               // String date = day + "/"+ month+"/"+year;
+               // RetrofitHelper.getAllCovoiturages(edDepart.getText().toString(),
+               //         edArrive.getText().toString(), date,
+               //         ctx );
             }
 
         });

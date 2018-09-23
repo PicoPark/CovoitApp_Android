@@ -34,6 +34,7 @@
     <string name="textInscriptionReussi">Inscription reussi, veuillez vous connectez</string>
     <string name="textInscriptionError">Inscription raté, user déjà inscrit</string>
 
+
     <string name="msgErrorLogin">email et/ou password faux</string>
     <string name="msgErrorNetwork">Erreur réseau</string>
     <string name="msgErrorNetworkNews">Erreur réseau, récupération des news local</string>
@@ -42,5 +43,7 @@
     <string name="msgSuccesUpdNews">Modification réussi</string>
 
     <string name="msgSuccesDel">Suppression réussi</string>
+    <string name="btnAccepter">Accepter</string>
+    <string name="btnRefuser">Refuser</string>
 
 </resources>

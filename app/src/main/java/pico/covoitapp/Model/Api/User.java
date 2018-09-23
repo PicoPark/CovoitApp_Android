@@ -12,12 +12,19 @@ public class User {
 
     private String lastname;
     private String voiture;
+    private String imageURL;
 
-    public User(String email, String password, String firstname, String lastname) {
+    public User() {
+    }
+
+    public User(String email, String password, String firstname, String phone, String lastname, String voiture, String imageURL) {
         this.email = email;
         this.password = password;
         this.firstname = firstname;
+        this.phone = phone;
         this.lastname = lastname;
+        this.voiture = voiture;
+        this.imageURL = imageURL;
     }
 
     public String getEmail() {

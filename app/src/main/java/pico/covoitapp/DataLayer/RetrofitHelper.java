@@ -2,17 +2,12 @@ package pico.covoitapp.DataLayer;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import pico.covoitapp.Model.Api.Covoiturage;
 import pico.covoitapp.Model.Api.User;
 import pico.covoitapp.Utils.Interface.Realm.ICovoiturage;
-import pico.covoitapp.Utils.Interface.Realm.IUserInterface;
+import pico.covoitapp.Utils.Interface.Realm.IUser;
 import pico.covoitapp.Utils.Interface.Retrofit.CovoiturageChannel;
 import pico.covoitapp.Utils.Interface.Retrofit.UserChannel;
 import retrofit2.Call;
@@ -87,7 +82,7 @@ public class RetrofitHelper {
         }
     }
 
-    public static void getUserInfo(int id, final IUserInterface listener){
+    public static void getUserInfo(int id,final IUser listener){
         if (listener != null) {
             RetrofitHelper.getmUserChannel().getUserInfo(id).enqueue(new Callback<User>(){
                 @Override

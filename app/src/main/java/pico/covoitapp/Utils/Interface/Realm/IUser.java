@@ -6,7 +6,7 @@ import pico.covoitapp.Model.Api.UserLogin;
 import pico.covoitapp.Model.Realm.UserRealm;
 import pico.covoitapp.Utils.Interface.IServiceResultListener;
 
-public interface IUserInterface {
+public interface IUser {
 
    // void create(User user, final IServiceResultListener<String>
    //         resultListener);

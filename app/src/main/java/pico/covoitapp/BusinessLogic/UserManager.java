@@ -236,8 +236,6 @@ public class UserManager {
     public void register(final User user) {
 
 
-
-
         userApi.create(user, new IServiceResultListener<String>() {
             @Override
             public void onResult(final ServiceResult<String> result) {

@@ -34,7 +34,7 @@
                 android:paddingStart="50dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image"
+                    android:id="@+id/registery_image"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_horizontal"

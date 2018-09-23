@@ -2,8 +2,12 @@ package pico.covoitapp.UI.Login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -14,6 +18,11 @@ import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.bt_go)
     Button bt_go;
 
+    @BindView(R.id.registery_image)
+    ImageView img;
 
     @BindView(R.id.edit_email)
     EditText edit_email;
@@ -41,11 +52,16 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.edit_lastname)
     EditText edit_lastname;
 
+
+    private StorageReference mStorageRef;
+    private static final int CAMERA_REQUEST = 1888;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ShowEnterAnimation();
@@ -158,15 +174,28 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void addUer(){
 
+        Toast.makeText(getApplicationContext(),"Nous avons besoin d'une photo de profil",Toast.LENGTH_SHORT).show();
+
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+
+
         UserManager registerUser = new UserManager(this,this);
-        registerUser.register(
-                new User(edit_email.getText().toString(),
-                        edit_password.getText().toString(),
-                        edit_firstname.getText().toString(),
-                        edit_lastname.getText().toString())
-        );
+        User user = new User();
 
 
+
+
+
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            img.setImageBitmap(photo);
+        }
     }
 
 }
