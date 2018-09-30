@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,46 +16,60 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/reservation_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
             android:gravity="center"
-            />
+            android:src="@drawable/user" />
 
 
         <TextView
             android:id="@+id/reservation_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:textSize="20dp"
-            />
+            android:layout_above="@+id/reservation_trajet"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/reservation_image"
+            android:padding="10dp"
+            android:text="John Doe"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/reservation_trajet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_below="@+id/reservation_image"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:textSize="20dp"
-            />
+            android:text="Paris - Lannion"
+            android:textSize="20dp" />
 
         <Button
             android:id="@+id/resrevation_btn_yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/reservation_trajet"
+            android:layout_toEndOf="@+id/resrevation_btn_no"
             android:background="@drawable/btn_radius"
-            android:text="@string/btnRefuser" />
 
+            android:text="@string/btnRefuser"
+            tools:layout_alignParentEnd="true" />
 
 
         <Button
             android:id="@+id/resrevation_btn_no"
-            android:background="@drawable/btn_radius"
-            android:layout_width="wrap_content"
+            android:layout_width="194dp"
             android:layout_height="wrap_content"
-            android:text="@string/btnAccepter" />
+            android:layout_below="@+id/reservation_trajet"
+            android:background="@drawable/btn_radius"
+
+            android:text="@string/btnAccepter"
+            tools:layout_alignParentStart="true" />
 
 
     </RelativeLayout>

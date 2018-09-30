@@ -1,4 +1,6 @@
 package pico.covoitapp.Model.Api;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
 }

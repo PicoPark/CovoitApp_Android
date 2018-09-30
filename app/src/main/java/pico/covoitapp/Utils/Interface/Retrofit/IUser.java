@@ -1,10 +1,5 @@
-package pico.covoitapp.Utils.Interface.Realm;
+package pico.covoitapp.Utils.Interface.Retrofit;
 
-import pico.covoitapp.Model.Api.User;
-import pico.covoitapp.Model.Api.UserInfo;
-import pico.covoitapp.Model.Api.UserLogin;
-import pico.covoitapp.Model.Realm.UserRealm;
-import pico.covoitapp.Utils.Interface.IServiceResultListener;
 
 public interface IUser {
 

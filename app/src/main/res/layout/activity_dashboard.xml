@@ -111,7 +111,7 @@
 
 
                 <Button
-                    android:id="@+id/bt_go"
+                    android:id="@+id/dashboard_btn_edit"
                     android:layout_width="140dp"
                     android:layout_height="45dp"
                     android:layout_alignParentBottom="true"
@@ -130,60 +130,70 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/dashboard_btn_message"
-        android:layout_width="56dp"
-        android:layout_height="48dp"
-        android:layout_margin="14dp"
-        android:background="@drawable/circle_transparent"
-        android:contentDescription="@string/depart"
-        android:src="@android:drawable/ic_dialog_email"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="426dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <ImageButton
-        android:id="@+id/dashboard_btn_reservation"
-        android:layout_width="56dp"
-        android:layout_height="48dp"
-        android:layout_margin="14dp"
-        android:background="@drawable/circle_transparent"
-        android:contentDescription="@string/depart"
-        android:scaleType="fitCenter"
-        android:src="@drawable/car"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="426dp" />
+        <ImageButton
+            android:id="@+id/dashboard_btn_message"
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:layout_margin="14dp"
+            android:background="@drawable/circle_transparent"
+            android:contentDescription="@string/depart"
+            android:src="@android:drawable/ic_dialog_email"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="426dp" />
 
-    <ImageView
-        android:id="@+id/dashboard_notif"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@android:drawable/ic_notification_overlay"
-        tools:layout_editor_absoluteX="166dp"
-        tools:layout_editor_absoluteY="421dp" />
+        <ImageButton
+            android:id="@+id/dashboard_btn_add"
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:layout_margin="14dp"
+            android:background="@drawable/circle_transparent"
+            android:contentDescription="@string/depart"
+            android:src="@android:drawable/ic_menu_add"
+            tools:layout_editor_absoluteX="221dp"
+            tools:layout_editor_absoluteY="426dp" />
 
-    <ImageButton
-        android:id="@+id/dashboard_btn_add"
-        android:layout_width="56dp"
-        android:layout_height="48dp"
-        android:layout_margin="14dp"
-        android:background="@drawable/circle_transparent"
-        android:contentDescription="@string/depart"
-        android:src="@android:drawable/ic_menu_add"
-        tools:layout_editor_absoluteX="221dp"
-        tools:layout_editor_absoluteY="426dp" />
+        <ImageButton
+            android:id="@+id/dashboard_btn_search"
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:layout_margin="14dp"
+            android:background="@drawable/circle_transparent"
+            android:contentDescription="@string/depart"
+            android:src="@android:drawable/ic_menu_search"
+            tools:layout_editor_absoluteX="312dp"
+            tools:layout_editor_absoluteY="426dp" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/dashboard_btn_search"
-        android:layout_width="56dp"
-        android:layout_height="48dp"
-        android:layout_margin="14dp"
-        android:background="@drawable/circle_transparent"
-        android:contentDescription="@string/depart"
-        android:src="@android:drawable/ic_menu_search"
-        tools:layout_editor_absoluteX="312dp"
-        tools:layout_editor_absoluteY="426dp" />
+            <ImageButton
+                android:id="@+id/dashboard_btn_reservation"
+                android:layout_width="56dp"
+                android:layout_height="48dp"
+                android:layout_margin="14dp"
+                android:background="@drawable/circle_transparent"
+                android:contentDescription="@string/depart"
+                android:scaleType="fitCenter"
+                android:src="@drawable/car"
+                tools:layout_editor_absoluteX="120dp"
+                tools:layout_editor_absoluteY="426dp" />
 
+            <ImageView
+                android:id="@+id/dashboard_notif"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@android:drawable/ic_notification_overlay"
+                tools:layout_editor_absoluteX="166dp"
+                tools:layout_editor_absoluteY="421dp" />
+        </FrameLayout>
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

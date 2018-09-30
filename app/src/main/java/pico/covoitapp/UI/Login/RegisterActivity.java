@@ -5,15 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
@@ -25,14 +24,14 @@ import android.widget.Toast;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pico.covoitapp.BusinessLogic.UserManager;
-import pico.covoitapp.Model.Api.User;
+import pico.covoitapp.BusinessLogic.UtilisateurManager;
+import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.R;
-import pico.covoitapp.Utils.ImageManager;
+import pico.covoitapp.UI.DashboardActivity;
+import pico.covoitapp.Utils.Interface.Retrofit.IUser;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -59,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText edit_numero;
 
 
+    private final String TAG = "covoitApp.Register";
     private StorageReference mStorageRef;
     private static final int CAMERA_REQUEST = 1888;
 
@@ -67,6 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+
+        img.setImageResource(R.drawable.user);
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -176,37 +178,51 @@ public class RegisterActivity extends AppCompatActivity {
         animateRevealClose();
     }
     private void addUer(){
+        Log.e(TAG, "drawable activity : " + img.getDrawable());
+        Log.e(TAG, "drawable context : " + getApplicationContext().getDrawable(R.drawable.user));
 
-        if(img.getDrawable().equals(getApplicationContext().getDrawable(R.drawable.user)){
+        if(img.getDrawable().equals( getApplicationContext().getDrawable(R.drawable.user))){
             Toast.makeText(getApplicationContext(),"Nous avons besoin d'une photo de profil",Toast.LENGTH_SHORT).show();
 
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
         }else{
-            UserManager registerUser = new UserManager(this,this);
-            User user = new User();
 
-            user.setEmail(edit_email.getText().toString());
-            user.setFirstname(edit_firstname.getText().toString());
-            user.setLastname(edit_lastname.getText().toString());
-            user.setPassword(edit_password.getText().toString());
-            user.setPhone(edit_numero.getText().toString());
+
+            RetrofitHelper.verification(edit_email.getText().toString(), new IUser() {
+                @Override
+                public void onRetrofitResult(boolean okay) {
+                    if (okay) {
+                        MUtilisateur user = new MUtilisateur();
+                        user.setMail(edit_email.getText().toString());
+                        user.setPrenom(edit_firstname.getText().toString());
+                        user.setNom(edit_lastname.getText().toString());
+                        user.setPassword(edit_password.getText().toString());
+
+                        RetrofitHelper.addUser(user, new IUser() {
+                            @Override
+                            public void onRetrofitResult(boolean okay) {
+                                Toast.makeText(getApplicationContext(), "Votre compte a bien été créer", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getBaseContext(), DashboardActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "un compte éxiste déjà avec l'adresse mail : " + edit_email.getText(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+            //user.setPhone(edit_numero.getText().toString());
 
           //  Uri.fromFile(new File( ))
 
         //    ImageManager.getInstance().uploadImage(img.get);
 
+
         }
-
-
-
-
-
-
-
-
-
 
     }
 

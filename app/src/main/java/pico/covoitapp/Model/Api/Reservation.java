@@ -1,32 +1,39 @@
 package pico.covoitapp.Model.Api;
 
-public class Reservation {
+import java.io.Serializable;
 
-    private Covoiturage covoiturage;
-    private  User utilisateur;
+public class Reservation implements Serializable {
+
+    private int Id;
+    private boolean isValidate;
+    private MCovoiturage covoiturage;
+    private MUtilisateur utilisateur;
 
     public Reservation() {
-        this(new Covoiturage(),new User());
+        covoiturage = new MCovoiturage();
+        utilisateur = new MUtilisateur();
     }
 
-    public Reservation(Covoiturage covoiturage, User utilisateur) {
+    public Reservation(int id, boolean isValidate, MCovoiturage covoiturage, MUtilisateur utilisateur) {
+        this.Id = id;
+        this.isValidate = isValidate;
         this.covoiturage = covoiturage;
         this.utilisateur = utilisateur;
     }
 
-    public Covoiturage getCovoiturage() {
+    public MCovoiturage getCovoiturage() {
         return covoiturage;
     }
 
-    public void setCovoiturage(Covoiturage covoiturage) {
+    public void setCovoiturage(MCovoiturage covoiturage) {
         this.covoiturage = covoiturage;
     }
 
-    public User getUtilisateur() {
+    public MUtilisateur getUtilisateur() {
         return utilisateur;
     }
 
-    public void setUtilisateur(User utilisateur) {
+    public void setUtilisateur(MUtilisateur utilisateur) {
         this.utilisateur = utilisateur;
     }
 }

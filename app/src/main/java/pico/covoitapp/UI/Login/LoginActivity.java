@@ -8,24 +8,31 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.transition.Explode;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pico.covoitapp.BusinessLogic.UserManager;
+import pico.covoitapp.BusinessLogic.UtilisateurManager;
+import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.Model.Api.UserLogin;
 import pico.covoitapp.R;
+import pico.covoitapp.Utils.Interface.Retrofit.IUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity{
 
     @BindView(R.id.et_username)
     AutoCompleteTextView etUsername;
@@ -40,13 +47,15 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.checkboxStayConnected)
     CheckBox checkboxStayConnected;
 
-    UserManager userMng;
+    UtilisateurManager userMng;
+
+    private final String TAG ="covoitApp.Login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        userMng = new UserManager(this, this);
+//        userMng = new UtilisateurManager(this, this);
 
         ButterKnife.bind(this);
         askPermission();
@@ -76,12 +85,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        userMng.isConnected();
-
     }
 
     @OnClick({R.id.bt_go, R.id.fab})
     public void onClick(View view) {
+        Log.e(TAG,"on click + " + view.getId() + " fab : " + R.id.fab + " go : " + R.id.bt_go );
         switch (view.getId()) {
             case R.id.fab:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -99,9 +107,37 @@ public class LoginActivity extends AppCompatActivity {
 
                 break;
             case R.id.bt_go:
-
-                userMng.connect(new UserLogin(etUsername.getText().toString(),etPassword.getText().toString()),checkboxStayConnected.isChecked());
+                RetrofitHelper.connect( new MUtilisateur(etUsername.getText().toString(),etPassword.getText().toString()), new IUser(){
+                    @Override
+                    public void onRetrofitResult(boolean okay) {
+                        if(okay){
+                            goToLoginSuccesAnimation();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Echec de connexion", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+               // userMng.connect(new UserLogin(etUsername.getText().toString(),etPassword.getText().toString()),checkboxStayConnected.isChecked());
                 break;
         }
     }
+
+    private void goToLoginSuccesAnimation() {
+
+        Intent intent = new Intent(getApplicationContext(), LoginSuccessActivity.class);
+        startActivity(intent);
+      //  Toast.makeText(getApplicationContext(),"connexion on" , )
+      // Explode explode = new Explode();
+
+      // getWindow().setExitTransition(explode);
+      // getWindow().setEnterTransition(explode);
+      // ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+      // Intent i2 = new Intent(getApplicationContext(), LoginSuccessActivity.class);
+      // startActivity(i2, oc2.toBundle());
+      // explode.setDuration(500);
+
+    }
+
+
+
 }

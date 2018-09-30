@@ -5,12 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.R;
 import retrofit2.Retrofit;
 
@@ -27,16 +29,19 @@ public class DashboardActivity extends AppCompatActivity {
     @BindView(R.id.dashboard_tv_voiture)
     TextView tvVoiture;
 
+    @BindView(R.id.dashboard_btn_edit)
+    Button btngo;
+
     @BindView(R.id.dashboard_btn_add)
-    Button btnAdd;
+    ImageButton btnAdd;
     @BindView(R.id.dashboard_btn_reservation)
-    Button btnReservation;
+    ImageButton btnReservation;
     @BindView(R.id.dashboard_notif)
     ImageView imgNotif;
     @BindView(R.id.dashboard_btn_message)
-    Button btnMessage;
+    ImageButton btnMessage;
     @BindView(R.id.dashboard_btn_search)
-    Button btnSearch;
+    ImageButton btnSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +52,13 @@ public class DashboardActivity extends AppCompatActivity {
 
         //Todo : set value
 
-        tvMail.setText(RetrofitHelper.mUser.getEmail());
-        tvPhone.setText(RetrofitHelper.mUser.getPhone());
-        tvPrenom.setText(RetrofitHelper.mUser.getFirstname());
-        tvNom.setText(RetrofitHelper.mUser.getLastname());
-        tvVoiture.setText(RetrofitHelper.mUser.getVoiture());
+        btnMessage.setEnabled(false);
+
+        tvMail.setText(RetrofitHelper.me.getMail());
+       // tvPhone.setText(RetrofitHelper.mUser.getPhone());
+        tvPrenom.setText(RetrofitHelper.me.getPrenom());
+        tvNom.setText(RetrofitHelper.me.getNom());
+       // tvVoiture.setText(RetrofitHelper.me.getVoiture());
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity {
         btnReservation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                Intent intent = new Intent(v.getContext(), ReservationActivity.class);
                 v.getContext().startActivity(intent);
 
             }

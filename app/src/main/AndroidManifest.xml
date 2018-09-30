@@ -22,11 +22,12 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".UI.SearchActivity" />
+        <activity android:name=".UI.Login.RegisterActivity" />
+        <activity android:name=".UI.Login.LoginSuccessActivity" />
         <activity android:name=".UI.CovoiturageDetailsActivity" />
         <activity android:name=".UI.DashboardActivity" />
         <activity android:name=".UI.AddActivity" />

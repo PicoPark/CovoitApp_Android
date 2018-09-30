@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import pico.covoitapp.Model.Api.Covoiturage;
 import pico.covoitapp.Model.Api.Message;
 import pico.covoitapp.R;
 

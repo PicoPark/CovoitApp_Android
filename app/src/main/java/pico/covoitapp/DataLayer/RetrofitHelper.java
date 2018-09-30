@@ -4,12 +4,18 @@ import android.util.Log;
 
 import java.util.List;
 
-import pico.covoitapp.Model.Api.Covoiturage;
-import pico.covoitapp.Model.Api.User;
-import pico.covoitapp.Utils.Interface.Realm.ICovoiturage;
-import pico.covoitapp.Utils.Interface.Realm.IUser;
+import okhttp3.Request;
+
+import pico.covoitapp.Model.Api.MCovoiturage;
+import pico.covoitapp.Model.Api.MUtilisateur;
+import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.Utils.Interface.Retrofit.CovoiturageChannel;
+import pico.covoitapp.Utils.Interface.Retrofit.ICovoiturage;
+import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
+import pico.covoitapp.Utils.Interface.Retrofit.IUser;
+import pico.covoitapp.Utils.Interface.Retrofit.ReservationChannel;
 import pico.covoitapp.Utils.Interface.Retrofit.UserChannel;
+import pico.covoitapp.Utils.Tools;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,27 +24,33 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitHelper {
 
-
-    private static final String BASE_URL = "http://localhost:56263/Service1.svc/";
+private static final String TAG = "covoitApp.Retrofit";
+    private static final String BASE_URL = "http://scmp1-expea-001.azurewebsites.net/api/Service1.svc/";
 
     private static Retrofit mRetrofit = null;
     private static CovoiturageChannel mCovoiturageChannel = null;
     private static UserChannel mUserChannel = null;
+    private static ReservationChannel mReservationChannel = null;
 
-    public static List<Covoiturage> mListCovoiturages;
-    public static User mUser;
+    public static List<MCovoiturage> mListCovoiturages;
+    public static List<Reservation> mListReservations;
+    public static MUtilisateur mUser;
+    public static MUtilisateur me;
+    public static Reservation mresa;
+    public static MCovoiturage mCovoiturage;
 
     public static void init( ) {
         // Gson gson = new GsonBuilder( ).setDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ" ).create( );
 
         mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl( BASE_URL ).build( );
-        Log.e("retro", "build ok");
         mCovoiturageChannel = mRetrofit.create( CovoiturageChannel.class );
         mUserChannel = mRetrofit.create( UserChannel.class );
+        mReservationChannel = mRetrofit.create(ReservationChannel.class);
+
 
     }
 
-    public static CovoiturageChannel getmCovoitirageChannel(){
+    public static CovoiturageChannel getmCovoiturageChannel(){
         if(mCovoiturageChannel==null){
             init();
         }
@@ -52,14 +64,98 @@ public class RetrofitHelper {
         return mUserChannel;
     }
 
-    public static void getAllCovoiturages( String depart, String arrive, String date, final ICovoiturage listener ) {
-        if (listener != null) {
-            RetrofitHelper.getmCovoitirageChannel().getCovoiturages(depart,arrive,date).enqueue(new Callback<List<Covoiturage>>() {
-                @Override
-                public void onResponse(Call<List<Covoiturage>> call, Response<List<Covoiturage>> response) {
-                    if (response != null) {
-                        List<Covoiturage> channels = response.body();
+    public static ReservationChannel getmReservationChannel() {
+        if( mReservationChannel==null){
+            init();
+        }
+        return mReservationChannel;
+    }
 
+    public static void connect(MUtilisateur user , final IUser listener){
+        if (listener != null) {
+            RetrofitHelper.getmUserChannel().connectUser(user).enqueue(new Callback<MUtilisateur>() {
+                @Override
+                public void onResponse(Call<MUtilisateur> call, Response<MUtilisateur> response) {
+                    if (response != null) {
+                        MUtilisateur result = response.body();
+                        if(result != null){
+                            me = result;
+                            listener.onRetrofitResult(true);
+                        }else {
+                            listener.onRetrofitResult(false);
+                        }
+                    }else {
+                        listener.onRetrofitResult(false);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MUtilisateur> call, Throwable t) {
+                    listener.onRetrofitResult(false);
+
+                }
+            });
+        }
+
+    }
+
+    public static void verification(String email, final IUser listener){
+
+            RetrofitHelper.getmUserChannel().verification(email).enqueue(new Callback<Boolean>() {
+                @Override
+                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    Boolean result = response.body();
+                   if(result){
+                       listener.onRetrofitResult(true);
+                   }else{
+                       listener.onRetrofitResult(false);
+                   }
+                }
+
+                @Override
+                public void onFailure(Call<Boolean> call, Throwable t) {
+                    listener.onRetrofitResult(false);
+                }
+            });
+
+    }
+
+    public static void addUser(MUtilisateur user, final IUser listener){
+        if (listener != null) {
+            RetrofitHelper.getmUserChannel().createUser(user).enqueue(new Callback<MUtilisateur>() {
+                @Override
+                public void onResponse(Call<MUtilisateur> call, Response<MUtilisateur> response) {
+                    if (response != null) {
+                        MUtilisateur result = response.body();
+                        if(result.getMail() != null){
+                            me = result;
+                            listener.onRetrofitResult(true);
+                        }else
+                            listener.onRetrofitResult(false);
+                    }else
+                        listener.onRetrofitResult(false);
+                }
+
+                @Override
+                public void onFailure(Call<MUtilisateur> call, Throwable t) {
+                    listener.onRetrofitResult(false);
+
+                }
+            });
+        }
+
+    }
+
+    public static void getAllCovoiturages(MCovoiturage covoit, final ICovoiturage listener ) {
+        Request query = RetrofitHelper.getmCovoiturageChannel().getListCovoiturage(covoit).request();
+        Log.e(TAG,"body : " + Tools.bodyToString(query));
+        if (listener != null) {
+            RetrofitHelper.getmCovoiturageChannel().getListCovoiturage(covoit).enqueue(new Callback<List<MCovoiturage>>() {
+                @Override
+                public void onResponse(Call<List<MCovoiturage>> call, Response<List<MCovoiturage>> response) {
+                    if (response != null) {
+                        Log.e(TAG, "response : " + response.toString());
+                        List<MCovoiturage> channels = response.body();
                         if (channels != null) {
                             mListCovoiturages = channels;
                             listener.onRetrofitResult(true);
@@ -72,7 +168,7 @@ public class RetrofitHelper {
                 }
 
                 @Override
-                public void onFailure(Call<List<Covoiturage>> call, Throwable t) {
+                public void onFailure(Call<List<MCovoiturage>> call, Throwable t) {
                     listener.onRetrofitResult(false);
                 }
             });
@@ -82,30 +178,116 @@ public class RetrofitHelper {
         }
     }
 
-    public static void getUserInfo(int id,final IUser listener){
+    public static void getUserInfo(int id, final IUser listener){
+    Log.e(TAG, String.valueOf(id));
+        Request query = RetrofitHelper.getmUserChannel().getUserInfo("7").request();
+        Log.e(TAG,"body : " + query.url());
         if (listener != null) {
-            RetrofitHelper.getmUserChannel().getUserInfo(id).enqueue(new Callback<User>(){
+            RetrofitHelper.getmUserChannel().getUserInfo("7").enqueue(new Callback<MUtilisateur>(){
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
+                public void onResponse(Call<MUtilisateur> call, Response<MUtilisateur> response) {
                     if (response != null) {
-                        User channel = response.body();
+                        MUtilisateur channel = response.body();
+                        Log.e(TAG, response.message());
                         if (channel != null) {
                             mUser = channel;
                             listener.onRetrofitResult(true);
-                        } else {
+                        } else
                             listener.onRetrofitResult(false);
-                        }
-                    } else {
+                    } else
                         listener.onRetrofitResult(false);
-                    }
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure(Call<MUtilisateur> call, Throwable t) {
                     listener.onRetrofitResult(false);
                 }
             });
         }
 
     }
+
+    public static void saveReservation(Reservation resa, final IReservation listener){
+        Request query = RetrofitHelper.getmReservationChannel().postReservation(resa).request();
+        Log.e(TAG, Tools.bodyToString(query));
+            RetrofitHelper.getmReservationChannel().postReservation(resa).enqueue(new Callback<Reservation>() {
+                @Override
+                public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                    if (response != null) {
+                        Reservation channel = response.body();
+                        Log.e(TAG, response.message());
+                        if (channel != null) {
+                            mresa = channel;
+                            listener.onRetrofitResult(true);
+                        } else
+                            listener.onRetrofitResult(false);
+                    } else
+                        listener.onRetrofitResult(false);
+                }
+
+                @Override
+                public void onFailure(Call<Reservation> call, Throwable t) {
+                    listener.onRetrofitResult(false);
+                }
+            });
+
+
+    }
+
+    public static void saveCovoiturage(MCovoiturage covoit, final ICovoiturage listener){
+           RetrofitHelper.getmCovoiturageChannel().postCovoiturage(covoit).enqueue(new Callback<MCovoiturage>() {
+                @Override
+                public void onResponse(Call<MCovoiturage> call, Response<MCovoiturage> response) {
+                    if (response != null) {
+                        MCovoiturage result = response.body();
+                        if(result.getArrive() != null){
+                            mCovoiturage= result;
+                            listener.onRetrofitResult(true);
+                        }else
+                            listener.onRetrofitResult(false);
+                    }else
+                        listener.onRetrofitResult(false);
+                }
+
+                @Override
+                public void onFailure(Call<MCovoiturage> call, Throwable t) {
+                    listener.onRetrofitResult(false);
+                }
+            });
+
+    }
+
+
+    public static void getReservationFromConducteur(int id, final  IReservation listener){
+        Request query = RetrofitHelper.getmReservationChannel().getReservationByUser(String.valueOf(id)).request();
+        Log.e(TAG, "body : "+ query.url());
+        RetrofitHelper.getmReservationChannel().getReservationByUser(String.valueOf(id)).enqueue(new Callback<List<Reservation>>() {
+            @Override
+            public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
+                if (response != null) {
+                    Log.e(TAG, response.toString());
+                    List<Reservation> result = response.body();
+                    if(result.size() != 0){
+                        mListReservations = result;
+                        listener.onRetrofitResult(true);
+                    }else {
+                        Log.e(TAG, "liste retrofit vide");
+                        listener.onRetrofitResult(false);
+                    }
+                }else {
+                    Log.e(TAG, "other failed");
+                    listener.onRetrofitResult(false);
+                }
+            }
+
+
+
+            @Override
+            public void onFailure(Call<List<Reservation>> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 }

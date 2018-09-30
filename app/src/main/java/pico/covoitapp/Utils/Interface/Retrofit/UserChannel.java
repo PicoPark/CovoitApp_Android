@@ -2,7 +2,7 @@ package pico.covoitapp.Utils.Interface.Retrofit;
 
 import java.util.ArrayList;
 
-import pico.covoitapp.Model.Api.User;
+import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.Model.Api.UserInfo;
 import pico.covoitapp.Model.Api.UserLogin;
 import retrofit2.Call;
@@ -11,20 +11,25 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UserChannel {
-    public static final String ENDPOINT = "https://esgi-2017.herokuapp.com";
 
 
-    @POST("/login")
-    Call<String> connectUser(@Body UserLogin userLogin);
+
+    @POST("Connexion")
+    Call<MUtilisateur> connectUser(@Body MUtilisateur userLogin);
 
 
-    @POST("/subscribe")
-    Call<Void> createUser(@Body User user);
+    @POST("Utilisateur")
+    Call<MUtilisateur> createUser(@Body MUtilisateur user);
 
-    @GET("/user")
-    Call<User> getUserInfo(int id);
+    @GET("Utilisateur/{id}")
+    Call<MUtilisateur> getUserInfo(@Path("id") String id);
+
+    @GET("Verification/{email}")
+    Call<Boolean> verification(@Query("email")String email);
 
 
 

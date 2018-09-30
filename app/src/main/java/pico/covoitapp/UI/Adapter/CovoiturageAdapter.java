@@ -1,6 +1,7 @@
 package pico.covoitapp.UI.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,25 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import pico.covoitapp.Model.Api.Covoiturage;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import pico.covoitapp.DataLayer.RetrofitHelper;
+
+import pico.covoitapp.Model.Api.MCovoiturage;
 import pico.covoitapp.R;
+import pico.covoitapp.Utils.Tools;
 
-public class CovoiturageAdapter extends Adapter<Covoiturage> {
+public class CovoiturageAdapter extends Adapter<MCovoiturage> {
 
+    private static final String TAG = "covoitApp.covoitAdap";
+    @BindView(R.id.covoit_trajet)
+    TextView tvTrajet;
+    @BindView(R.id.covoit_tarif)
+    TextView tvTarif ;
+    @BindView(R.id.covoit_date)
+    TextView tvDate ;
 
-    public CovoiturageAdapter(List<Covoiturage> mData, Context ctx) {
+    public CovoiturageAdapter(List<MCovoiturage> mData, Context ctx) {
         super(mData, ctx);
     }
 
@@ -25,12 +38,21 @@ public class CovoiturageAdapter extends Adapter<Covoiturage> {
         if (view == null) {
             view = LayoutInflater.from(ctx).inflate(R.layout.adapter_list_covoiturage, viewGroup, false);
         }
+        ButterKnife.bind(this,view);
 
-       // tvCardText = (TextView) view.findViewById( R.id.main_lv_text );
+        MCovoiturage covoiturage = RetrofitHelper.mListCovoiturages.get(i);
+        Log.e(TAG, "annee"  +covoiturage.getAnnee());
+        Log.e(TAG, "mois"  +covoiturage.getMois());
+        Log.e(TAG, "jours"  +covoiturage.getJours());
+        Log.e(TAG, "heure"  +covoiturage.getHeure());
+        Log.e(TAG, "minutes"  +covoiturage.getMinutes());
 
-        if( tvCardText != null ) {
-         //   tvCardText.setText( getItem(i) );
-        }
+
+        tvTarif.setText(covoiturage.getTarif()+ "€");
+        tvTrajet.setText(covoiturage.getDepart()+ " - " + covoiturage.getArrive());
+        tvDate.setText(Tools.showDateHeure(covoiturage));
+
+
 
         return view;
     }
