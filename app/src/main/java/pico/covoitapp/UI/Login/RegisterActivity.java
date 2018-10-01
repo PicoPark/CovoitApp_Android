@@ -171,6 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         mAnimator.start();
+
     }
 
     @Override

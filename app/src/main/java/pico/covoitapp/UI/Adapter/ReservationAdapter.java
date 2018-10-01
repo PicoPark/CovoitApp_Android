@@ -18,6 +18,8 @@ import butterknife.ButterKnife;
 import pico.covoitapp.DataLayer.RetrofitHelper;
 import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.R;
+import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
+import retrofit2.Retrofit;
 
 
 public class ReservationAdapter extends Adapter<Reservation>  {
@@ -42,6 +44,7 @@ public class ReservationAdapter extends Adapter<Reservation>  {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        final int j = i;
         if (view == null) {
             view = LayoutInflater.from(ctx).inflate(R.layout.adapter_list_reservation, viewGroup, false);
             ButterKnife.bind(this,view);
@@ -52,16 +55,36 @@ public class ReservationAdapter extends Adapter<Reservation>  {
         btnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                reservation.setValidate(false);
                 Log.e("CovoitApp.Button", "No");
-                Toast.makeText(view.getContext(), "Nok", Toast.LENGTH_LONG);
+                Toast.makeText(view.getContext(), "Nok", Toast.LENGTH_LONG).show();
+                RetrofitHelper.saveReservation(reservation, new IReservation() {
+                    @Override
+                    public void onRetrofitResult(boolean okay) {
+                        mData.remove(j);
+                        notifyDataSetChanged();
+
+                    }
+                });
             }
         });
 
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                reservation.setValidate(true);
                 Log.e("CovoitApp.Button", "Yes");
-                Toast.makeText(view.getContext(), "ok", Toast.LENGTH_LONG);
+                Toast.makeText(view.getContext(), "ok", Toast.LENGTH_LONG).show();
+                RetrofitHelper.saveReservation(reservation, new IReservation() {
+                    @Override
+                    public void onRetrofitResult(boolean okay) {
+                        mData.remove(j);
+                        notifyDataSetChanged();
+
+                    }
+                });
+
             }
         });
         reservation = getItem(i);

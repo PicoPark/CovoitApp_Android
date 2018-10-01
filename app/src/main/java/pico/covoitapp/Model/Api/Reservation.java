@@ -36,4 +36,20 @@ public class Reservation implements Serializable {
     public void setUtilisateur(MUtilisateur utilisateur) {
         this.utilisateur = utilisateur;
     }
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public boolean isValidate() {
+        return isValidate;
+    }
+
+    public void setValidate(boolean validate) {
+        isValidate = validate;
+    }
 }

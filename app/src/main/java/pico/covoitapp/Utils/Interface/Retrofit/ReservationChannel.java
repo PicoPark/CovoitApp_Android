@@ -16,7 +16,10 @@ import retrofit2.http.Query;
 public interface ReservationChannel {
 
     @GET("Reservation/{id}")
-    Call<List<Reservation>> getReservationByUser(@Path("id")String id);
+    Call<List<Reservation>> getReservationByConducteur(@Path("id")String id);
+
+    @GET("Reservation/Utilisateur/{id}")
+    Call<List<Reservation>> getReservationByPassager(@Path("id")String id);
 
     @POST("Reservation")
    Call<Reservation> postReservation(@Body Reservation reservation);

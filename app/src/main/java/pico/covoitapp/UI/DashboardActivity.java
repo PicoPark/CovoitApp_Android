@@ -3,6 +3,7 @@ package pico.covoitapp.UI;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -14,9 +15,10 @@ import butterknife.ButterKnife;
 import pico.covoitapp.DataLayer.RetrofitHelper;
 import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.R;
+import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
 import retrofit2.Retrofit;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements IReservation{
 
     @BindView(R.id.dashboard_tv_mail)
     TextView tvMail;
@@ -49,23 +51,26 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         ButterKnife.bind(this);
+        imgNotif.setVisibility(View.INVISIBLE);
 
         //Todo : set value
 
         btnMessage.setEnabled(false);
 
         tvMail.setText(RetrofitHelper.me.getMail());
-       // tvPhone.setText(RetrofitHelper.mUser.getPhone());
+        // tvPhone.setText(RetrofitHelper.mUser.getPhone());
         tvPrenom.setText(RetrofitHelper.me.getPrenom());
         tvNom.setText(RetrofitHelper.me.getNom());
-       // tvVoiture.setText(RetrofitHelper.me.getVoiture());
+        // tvVoiture.setText(RetrofitHelper.me.getVoiture());
+
+        RetrofitHelper.getReservationFromConducteur(RetrofitHelper.me.getId(), this);
+        RetrofitHelper.getReservationFromPassager(RetrofitHelper.me.getId(), this);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), AddActivity.class);
                 v.getContext().startActivity(intent);
-
             }
         });
 
@@ -97,4 +102,29 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
     }
+
+    private void NotifyReservation() {
+        Log.e("CovoitApp.Dashboard", "size : " + RetrofitHelper.mListReservationsConducteur.size() + " " + RetrofitHelper.mListReservationsPassager.size());
+        if (RetrofitHelper.mListReservationsConducteur.size() != 0 ||
+                RetrofitHelper.mListReservationsPassager.size() != 0) {
+            Log.e("CovoitApp.Dashboard", "set image visible");
+            imgNotif.setVisibility(View.VISIBLE);
+        }else
+            imgNotif.setVisibility(View.INVISIBLE);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NotifyReservation();
+    }
+
+
+
+    @Override
+    public void onRetrofitResult(boolean okay) {
+        NotifyReservation();
+    }
+
 }

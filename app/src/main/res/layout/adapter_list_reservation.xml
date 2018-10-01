@@ -57,7 +57,7 @@
             android:layout_toEndOf="@+id/resrevation_btn_no"
             android:background="@drawable/btn_radius"
 
-            android:text="@string/btnRefuser"
+            android:text="@string/btnAccepter"
             tools:layout_alignParentEnd="true" />
 
 
@@ -68,7 +68,7 @@
             android:layout_below="@+id/reservation_trajet"
             android:background="@drawable/btn_radius"
 
-            android:text="@string/btnAccepter"
+            android:text="@string/btnRefuser"
             tools:layout_alignParentStart="true" />
 
 
