@@ -9,6 +9,7 @@ import okhttp3.Request;
 
 import pico.covoitapp.Model.Api.MCovoiturage;
 import pico.covoitapp.Model.Api.MUtilisateur;
+import pico.covoitapp.Model.Api.MVehicule;
 import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.Utils.Interface.Retrofit.CovoiturageChannel;
 import pico.covoitapp.Utils.Interface.Retrofit.ICovoiturage;
@@ -34,6 +35,7 @@ public class RetrofitHelper {
     private static ReservationChannel mReservationChannel = null;
 
     public static List<MCovoiturage> mListCovoiturages;
+    public static List<MVehicule> mListVehicule;
     public static List<Reservation> mListReservationsConducteur;
     public static List<Reservation> mListReservationsPassager;
     public static MUtilisateur mUser;
@@ -45,7 +47,7 @@ public class RetrofitHelper {
         // Gson gson = new GsonBuilder( ).setDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ" ).create( );
         mListReservationsConducteur = new ArrayList<>();
         mListReservationsPassager = new ArrayList<>();
-
+        mListVehicule = new ArrayList<>();
         mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(BASE_URL).build();
         mCovoiturageChannel = mRetrofit.create(CovoiturageChannel.class);
         mUserChannel = mRetrofit.create(UserChannel.class);
@@ -260,6 +262,34 @@ public class RetrofitHelper {
 
     }
 
+    public static void getAllVoiture(final IUser listener){
+        RetrofitHelper.getmUserChannel().getAllVehicule().enqueue(new Callback<List<MVehicule>>() {
+            @Override
+            public void onResponse(Call<List<MVehicule>> call, Response<List<MVehicule>> response) {
+                Log.e(TAG, "response : " + response.toString());
+                if (response != null) {
+                    List<MVehicule> channels = response.body();
+                    Log.e(TAG, "response : " + response.toString());
+                    if (channels != null) {
+                        mListVehicule = channels;
+                        listener.onRetrofitResult(true);
+                    } else {
+                        listener.onRetrofitResult(false);
+                    }
+                } else {
+                    listener.onRetrofitResult(false);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MVehicule>> call, Throwable t) {
+                listener.onRetrofitResult(false);
+            }
+
+        });
+
+    }
 
     public static void getReservationFromConducteur(int id, final IReservation listener) {
         Request query = RetrofitHelper.getmReservationChannel().getReservationByConducteur(String.valueOf(id)).request();

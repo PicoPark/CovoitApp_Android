@@ -1,6 +1,7 @@
 package pico.covoitapp.Utils.Interface.Retrofit;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.Model.Api.MVehicule;
@@ -34,8 +35,8 @@ public interface UserChannel {
     @GET("Verification/{email}")
     Call<Boolean> verification(@Query("email")String email);
 
-    @GET("Vehicule")
-    Call<MVehicule> getAllVehicule();
+    @GET("Vehicules")
+    Call<List<MVehicule>> getAllVehicule();
 
     @POST("Association")
     Call<Void> setAssociation();

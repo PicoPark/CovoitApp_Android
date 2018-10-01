@@ -4,7 +4,7 @@ public class MVehicule {
 
     private int id_vehicule;
     private String marque;
-    private String model;
+    private String modele;
     private int nb_place;
 
     public MVehicule() {
@@ -13,7 +13,7 @@ public class MVehicule {
     public MVehicule(int id_vehicule, String marque, String model, int nb_place) {
         this.id_vehicule = id_vehicule;
         this.marque = marque;
-        this.model = model;
+        this.modele = model;
         this.nb_place = nb_place;
     }
 
@@ -34,11 +34,11 @@ public class MVehicule {
     }
 
     public String getModel() {
-        return model;
+        return modele;
     }
 
     public void setModel(String model) {
-        this.model = model;
+        this.modele = model;
     }
 
     public int getNb_place() {

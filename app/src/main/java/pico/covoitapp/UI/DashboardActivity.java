@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pico.covoitapp.DataLayer.RetrofitHelper;
 import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.R;
@@ -57,14 +58,7 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
 
         btnMessage.setEnabled(false);
 
-        tvMail.setText(RetrofitHelper.me.getMail());
-        // tvPhone.setText(RetrofitHelper.mUser.getPhone());
-        tvPrenom.setText(RetrofitHelper.me.getPrenom());
-        tvNom.setText(RetrofitHelper.me.getNom());
-        // tvVoiture.setText(RetrofitHelper.me.getVoiture());
-
-        RetrofitHelper.getReservationFromConducteur(RetrofitHelper.me.getId(), this);
-        RetrofitHelper.getReservationFromPassager(RetrofitHelper.me.getId(), this);
+        refreshScreen();
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +89,34 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 v.getContext().startActivity(intent);
 
             }
         });
 
+        btngo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("CovoitApp.Dashboard", "Click on Edit");
+                Intent intent = new Intent(v.getContext(), EditUtilisateurActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void refreshScreen(){
+
+        tvMail.setText(RetrofitHelper.me.getMail());
+        // tvPhone.setText(RetrofitHelper.mUser.getPhone());
+        tvPrenom.setText(RetrofitHelper.me.getPrenom());
+        tvNom.setText(RetrofitHelper.me.getNom());
+        // tvVoiture.setText(RetrofitHelper.me.getVoiture());
+
+        RetrofitHelper.getReservationFromConducteur(RetrofitHelper.me.getId(), this);
+        RetrofitHelper.getReservationFromPassager(RetrofitHelper.me.getId(), this);
     }
 
     private void NotifyReservation() {
@@ -117,7 +133,9 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
     @Override
     protected void onResume() {
         super.onResume();
+        refreshScreen();
         NotifyReservation();
+
     }
 
 
