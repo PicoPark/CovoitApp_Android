@@ -12,14 +12,15 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import pico.covoitapp.DataLayer.RetrofitHelper;
-import pico.covoitapp.Model.Api.Reservation;
+import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.R;
+import pico.covoitapp.Utils.ImageManager;
 import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
-import retrofit2.Retrofit;
 
 public class DashboardActivity extends AppCompatActivity implements IReservation{
+
+    @BindView(R.id.dashboard_image)
+    ImageView imgProfil;
 
     @BindView(R.id.dashboard_tv_mail)
     TextView tvMail;
@@ -27,8 +28,7 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
     TextView tvPhone;
     @BindView(R.id.dashboard_tv_prenom)
     TextView tvPrenom;
-    @BindView(R.id.dashboard_tv_nom)
-    TextView tvNom;
+
     @BindView(R.id.dashboard_tv_voiture)
     TextView tvVoiture;
 
@@ -57,8 +57,14 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
         //Todo : set value
 
         btnMessage.setEnabled(false);
+        imgProfil.setImageBitmap(ImageManager.getInstance().getImage());
+        tvMail.setText(RetrofitHelper.me.getMail());
+        // tvPhone.setText(RetrofitHelper.mUser.getPhone());
+        tvPrenom.setText(RetrofitHelper.me.getPrenom() +" "+ RetrofitHelper.me.getNom());
+        // tvVoiture.setText(RetrofitHelper.me.getVoiture());
 
-        refreshScreen();
+        RetrofitHelper.getReservationFromConducteur(RetrofitHelper.me.getId(), this);
+        RetrofitHelper.getReservationFromPassager(RetrofitHelper.me.getId(), this);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,8 +117,8 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
 
         tvMail.setText(RetrofitHelper.me.getMail());
         // tvPhone.setText(RetrofitHelper.mUser.getPhone());
-        tvPrenom.setText(RetrofitHelper.me.getPrenom());
-        tvNom.setText(RetrofitHelper.me.getNom());
+        tvPrenom.setText(RetrofitHelper.me.getPrenom()+" "+RetrofitHelper.me.getNom());
+        imgProfil.setImageBitmap(ImageManager.getInstance().getImage());
         // tvVoiture.setText(RetrofitHelper.me.getVoiture());
 
         RetrofitHelper.getReservationFromConducteur(RetrofitHelper.me.getId(), this);

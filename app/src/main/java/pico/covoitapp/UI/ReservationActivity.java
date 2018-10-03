@@ -14,11 +14,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.R;
 import pico.covoitapp.UI.Adapter.ReservationAdapter;
-import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
 
 public class ReservationActivity extends AppCompatActivity {
 

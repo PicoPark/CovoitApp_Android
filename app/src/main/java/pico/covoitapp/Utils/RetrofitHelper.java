@@ -1,4 +1,4 @@
-package pico.covoitapp.DataLayer;
+package pico.covoitapp.Utils;
 
 import android.util.Log;
 
@@ -17,7 +17,6 @@ import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
 import pico.covoitapp.Utils.Interface.Retrofit.IUser;
 import pico.covoitapp.Utils.Interface.Retrofit.ReservationChannel;
 import pico.covoitapp.Utils.Interface.Retrofit.UserChannel;
-import pico.covoitapp.Utils.Tools;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +41,7 @@ public class RetrofitHelper {
     public static MUtilisateur me;
     public static Reservation mresa;
     public static MCovoiturage mCovoiturage;
+    public static Boolean mailExist;
 
     public static void init() {
         // Gson gson = new GsonBuilder( ).setDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ" ).create( );
@@ -111,15 +111,18 @@ public class RetrofitHelper {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 Boolean result = response.body();
-                if (result) {
+                if (result != null) {
+                    mailExist = result;
                     listener.onRetrofitResult(true);
                 } else {
+                    Log.e(TAG, "erreur : " + response.toString());
                     listener.onRetrofitResult(false);
                 }
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.e(TAG, "erreur : " + t.getMessage());
                 listener.onRetrofitResult(false);
             }
         });

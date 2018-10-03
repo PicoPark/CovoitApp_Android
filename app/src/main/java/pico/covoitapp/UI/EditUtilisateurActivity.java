@@ -8,14 +8,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.Model.Api.MVehicule;
 import pico.covoitapp.R;
 import pico.covoitapp.Utils.Interface.Retrofit.IUser;

@@ -8,12 +8,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -26,9 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pico.covoitapp.BusinessLogic.UtilisateurManager;
-import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Utils.FireBaseHelper;
+import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.Model.Api.MUtilisateur;
-import pico.covoitapp.Model.Api.UserLogin;
 import pico.covoitapp.R;
 import pico.covoitapp.Utils.Interface.Retrofit.IUser;
 
@@ -89,7 +87,6 @@ public class LoginActivity extends AppCompatActivity{
 
     @OnClick({R.id.bt_go, R.id.fab})
     public void onClick(View view) {
-        Log.e(TAG,"on click + " + view.getId() + " fab : " + R.id.fab + " go : " + R.id.bt_go );
         switch (view.getId()) {
             case R.id.fab:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -107,6 +104,7 @@ public class LoginActivity extends AppCompatActivity{
 
                 break;
             case R.id.bt_go:
+
                 RetrofitHelper.connect( new MUtilisateur(etUsername.getText().toString(),etPassword.getText().toString()), new IUser(){
                     @Override
                     public void onRetrofitResult(boolean okay) {
@@ -117,6 +115,8 @@ public class LoginActivity extends AppCompatActivity{
                         }
                     }
                 });
+
+
                // userMng.connect(new UserLogin(etUsername.getText().toString(),etPassword.getText().toString()),checkboxStayConnected.isChecked());
                 break;
         }

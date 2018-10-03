@@ -5,14 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Utils.RetrofitHelper;
 
 import pico.covoitapp.Model.Api.MCovoiturage;
 import pico.covoitapp.R;

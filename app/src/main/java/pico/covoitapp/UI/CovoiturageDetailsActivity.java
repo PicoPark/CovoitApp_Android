@@ -2,7 +2,6 @@ package pico.covoitapp.UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,16 +9,14 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 
-import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Utils.RetrofitHelper;
 
 import pico.covoitapp.Model.Api.MCovoiturage;
 import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.R;
-import pico.covoitapp.BusinessLogic.UtilisateurManager;
 import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
 import pico.covoitapp.Utils.Tools;
 

@@ -7,7 +7,7 @@ public class MUtilisateur {
     private String prenom;
     private String mail;
     private String password;
-    private String profil_image;
+    private String profile_image;
 
     public MUtilisateur() {
     }
@@ -23,7 +23,7 @@ public class MUtilisateur {
         this.prenom = prenom;
         this.mail = mail;
         this.password = password;
-        this.profil_image = profil_image;
+        this.profile_image = profil_image;
     }
 
     public int getId() {
@@ -67,11 +67,11 @@ public class MUtilisateur {
     }
 
     public String getProfil_image() {
-        return profil_image;
+        return profile_image;
     }
 
     public void setProfil_image(String profil_image) {
-        this.profil_image = profil_image;
+        this.profile_image = profil_image;
     }
 
 

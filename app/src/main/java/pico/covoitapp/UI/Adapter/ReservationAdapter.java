@@ -1,7 +1,6 @@
 package pico.covoitapp.UI.Adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +14,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.Model.Api.Reservation;
 import pico.covoitapp.R;
 import pico.covoitapp.Utils.Interface.Retrofit.IReservation;
-import retrofit2.Retrofit;
 
 
 public class ReservationAdapter extends Adapter<Reservation>  {

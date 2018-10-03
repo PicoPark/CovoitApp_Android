@@ -26,11 +26,12 @@ import com.google.firebase.storage.StorageReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pico.covoitapp.BusinessLogic.UtilisateurManager;
-import pico.covoitapp.DataLayer.RetrofitHelper;
+import pico.covoitapp.Utils.IImage;
+import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.R;
 import pico.covoitapp.UI.DashboardActivity;
+import pico.covoitapp.Utils.ImageManager;
 import pico.covoitapp.Utils.Interface.Retrofit.IUser;
 
 
@@ -58,9 +59,12 @@ public class RegisterActivity extends AppCompatActivity {
     EditText edit_numero;
 
 
+    private boolean isPhotoTaked = false;
     private final String TAG = "covoitApp.Register";
     private StorageReference mStorageRef;
     private static final int CAMERA_REQUEST = 1888;
+
+    private Bitmap photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,36 +183,58 @@ public class RegisterActivity extends AppCompatActivity {
         animateRevealClose();
     }
     private void addUer(){
-        Log.e(TAG, "drawable activity : " + img.getDrawable());
-        Log.e(TAG, "drawable context : " + getApplicationContext().getDrawable(R.drawable.user));
+Log.e(TAG, "click");
+        Log.e(TAG,"isPhotoTaked " + isPhotoTaked);
+        if(!isPhotoTaked){
 
-        if(img.getDrawable().equals( getApplicationContext().getDrawable(R.drawable.user))){
-            Toast.makeText(getApplicationContext(),"Nous avons besoin d'une photo de profil",Toast.LENGTH_SHORT).show();
 
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            Toast.makeText(getApplicationContext(),"Nous avons besoin d'une photo de profil",Toast.LENGTH_SHORT).show();
 
         }else{
 
-
+            Log.e(TAG,"Verification");
             RetrofitHelper.verification(edit_email.getText().toString(), new IUser() {
                 @Override
                 public void onRetrofitResult(boolean okay) {
-                    if (okay) {
-                        MUtilisateur user = new MUtilisateur();
-                        user.setMail(edit_email.getText().toString());
-                        user.setPrenom(edit_firstname.getText().toString());
-                        user.setNom(edit_lastname.getText().toString());
-                        user.setPassword(edit_password.getText().toString());
+                    Log.e(TAG,"verif ok " +okay);
+                    if (okay && ! RetrofitHelper.mailExist) {
 
-                        RetrofitHelper.addUser(user, new IUser() {
+                        MUtilisateur me = new MUtilisateur();
+
+                      me = new MUtilisateur();
+                      me.setMail(edit_email.getText().toString());
+                      me.setPrenom(edit_firstname.getText().toString());
+                      me.setNom(edit_lastname.getText().toString());
+                      me.setPassword(edit_password.getText().toString());
+                      me.setProfil_image(edit_email.getText().toString() + ".jpg");
+                     final MUtilisateur tmp = me;
+                        RetrofitHelper.me = tmp;
+                        Log.e(TAG, "User créer : " + me.getProfil_image());
+                        ImageManager.getInstance().uploadImage(photo, RetrofitHelper.me.getMail() + ".jpg", new IImage() {
                             @Override
-                            public void onRetrofitResult(boolean okay) {
-                                Toast.makeText(getApplicationContext(), "Votre compte a bien été créer", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getBaseContext(), DashboardActivity.class);
-                                startActivity(intent);
+                            public void onFirebaseResult(boolean okay) {
+                                if (okay){
+
+                                    RetrofitHelper.addUser(tmp, new IUser() {
+                                        @Override
+                                        public void onRetrofitResult(boolean okay) {
+                                            if(okay) {
+                                                Log.e(TAG, "User image : " + RetrofitHelper.me.getProfil_image());
+                                                Toast.makeText(getApplicationContext(), "Votre compte a bien été créer", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getBaseContext(), LoginSuccessActivity.class);
+                                                startActivity(intent);
+                                            }else
+                                                Log.e(TAG, "erreur Retrofit");
+                                            }
+                                    });
+                                }else
+                                    Log.e(TAG, "erreur firebase");
                             }
                         });
+
+
 
                     } else {
                         Toast.makeText(getApplicationContext(), "un compte éxiste déjà avec l'adresse mail : " + edit_email.getText(), Toast.LENGTH_LONG).show();
@@ -220,7 +246,7 @@ public class RegisterActivity extends AppCompatActivity {
 
           //  Uri.fromFile(new File( ))
 
-        //    ImageManager.getInstance().uploadImage(img.get);
+        //
 
 
         }
@@ -229,8 +255,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            photo = (Bitmap) data.getExtras().get("data");
             img.setImageBitmap(photo);
+            isPhotoTaked = true;
 
         }
     }

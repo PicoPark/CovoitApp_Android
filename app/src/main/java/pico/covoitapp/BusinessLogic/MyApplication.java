@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import pico.covoitapp.Utils.FireBaseHelper;
 
 public class MyApplication extends Application {
 
@@ -29,6 +30,9 @@ public class MyApplication extends Application {
                 schemaVersion(0).
                 build();
         Realm.setDefaultConfiguration(config);
+
+
+        FireBaseHelper.init();
 
 
     }
