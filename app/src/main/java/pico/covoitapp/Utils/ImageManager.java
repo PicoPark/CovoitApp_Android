@@ -22,8 +22,8 @@ public class ImageManager {
     private StorageReference mStorageRef;
     private String TAG = "CovoitApp.ImageManager";
 
-    private  Bitmap image;
-
+    private  Bitmap image = null;
+    private String ActualImageName = "";
 
     private ImageManager() {
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -58,15 +58,12 @@ public class ImageManager {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e(TAG,"FireBAse failed " + e.getMessage());
+
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.e(TAG, "photo name : " + fileName);
 
-                Log.e(TAG, "profil name  : " + RetrofitHelper.me.getProfil_image());
-                Log.e(TAG,"FireBAse success ");
                // get Url after upload it
                 taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
@@ -84,17 +81,23 @@ public class ImageManager {
 
 
 
-    public void DownloadImage(String imageName, final IImage listener){
+    public void DownloadImage(final String imageName, final IImage listener){
 
-        long size = 1024*1024;
+        if(ActualImageName == imageName && image!=null){
 
-        mStorageRef.child(imageName).getBytes(size).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                listener.onFirebaseResult( image != null );
-            }
-        });
+            listener.onFirebaseResult( true);
+        }else {
+
+            long size = 1024 * 1024;
+            mStorageRef.child(imageName).getBytes(size).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    ActualImageName = imageName;
+                    listener.onFirebaseResult(image != null);
+                }
+            });
+        }
 
 
     }

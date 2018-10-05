@@ -7,6 +7,7 @@
     android:background="@drawable/bg"
     tools:context=".UI.Login.LoginActivity">
 
+
     <android.support.v7.widget.CardView
         android:layout_width="300dp"
         android:layout_height="300dp"
@@ -117,9 +118,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp">
                 <Button
-                    android:id="@+id/bt_go"
+                    android:id="@+id/login_bt_go"
                     android:background="@drawable/bt_shape"
-                    android:stateListAnimator="@drawable/state_list_animator_z"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:text="@string/go"
@@ -143,5 +143,13 @@
         android:layout_marginEnd="-20dp"
         android:background="@color/BlueHard"
         />
+
+    <com.victor.loading.rotate.RotateLoading
+        android:id="@+id/login_rotateloading"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        app:loading_color="#ffffff"
+        app:loading_width="5dp" />
 
 </RelativeLayout>

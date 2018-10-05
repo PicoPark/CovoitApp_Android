@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.R;
 import pico.covoitapp.Utils.ImageManager;
@@ -45,6 +46,10 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
     ImageButton btnMessage;
     @BindView(R.id.dashboard_btn_search)
     ImageButton btnSearch;
+    @BindView(R.id.dashboard_btn_log_out)
+    ImageButton btnLogOut;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +64,12 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
         btnMessage.setEnabled(false);
         imgProfil.setImageBitmap(ImageManager.getInstance().getImage());
         tvMail.setText(RetrofitHelper.me.getMail());
-        // tvPhone.setText(RetrofitHelper.mUser.getPhone());
+        tvPhone.setText(RetrofitHelper.me.getNumero());
         tvPrenom.setText(RetrofitHelper.me.getPrenom() +" "+ RetrofitHelper.me.getNom());
-        // tvVoiture.setText(RetrofitHelper.me.getVoiture());
+        if (RetrofitHelper.mVehicule !=null)
+            tvVoiture.setText(RetrofitHelper.mVehicule.getMarque() +  " "+ RetrofitHelper.mVehicule.getModel());
+        else
+            tvVoiture.setText("aucune voiture enregistré");
 
         RetrofitHelper.getReservationFromConducteur(RetrofitHelper.me.getId(), this);
         RetrofitHelper.getReservationFromPassager(RetrofitHelper.me.getId(), this);
@@ -95,31 +103,38 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 v.getContext().startActivity(intent);
-
             }
         });
 
         btngo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("CovoitApp.Dashboard", "Click on Edit");
                 Intent intent = new Intent(v.getContext(), EditUtilisateurActivity.class);
                 startActivity(intent);
+            }
+        });
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RetrofitHelper.me = new MUtilisateur();
+                finish();
             }
         });
 
     }
 
     private void refreshScreen(){
-
-        tvMail.setText(RetrofitHelper.me.getMail());
-        // tvPhone.setText(RetrofitHelper.mUser.getPhone());
-        tvPrenom.setText(RetrofitHelper.me.getPrenom()+" "+RetrofitHelper.me.getNom());
         imgProfil.setImageBitmap(ImageManager.getInstance().getImage());
-        // tvVoiture.setText(RetrofitHelper.me.getVoiture());
+        tvMail.setText(RetrofitHelper.me.getMail());
+        tvPhone.setText(RetrofitHelper.me.getNumero());
+        tvPrenom.setText(RetrofitHelper.me.getPrenom() +" "+ RetrofitHelper.me.getNom());
+        if (RetrofitHelper.mVehicule !=null)
+            tvVoiture.setText(RetrofitHelper.mVehicule.getMarque() +  " "+ RetrofitHelper.mVehicule.getModel());
+        else
+            tvVoiture.setText("aucune voiture enregistré");
+
 
         RetrofitHelper.getReservationFromConducteur(RetrofitHelper.me.getId(), this);
         RetrofitHelper.getReservationFromPassager(RetrofitHelper.me.getId(), this);
@@ -141,7 +156,6 @@ public class DashboardActivity extends AppCompatActivity implements IReservation
         super.onResume();
         refreshScreen();
         NotifyReservation();
-
     }
 
 

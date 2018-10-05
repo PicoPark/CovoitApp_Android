@@ -8,6 +8,7 @@ public class MUtilisateur {
     private String mail;
     private String password;
     private String profile_image;
+    private String numero;
 
     public MUtilisateur() {
     }
@@ -17,13 +18,23 @@ public class MUtilisateur {
         this.password = password;
     }
 
-    public MUtilisateur(int id, String nom, String prenom, String mail, String password, String profil_image) {
+    public MUtilisateur(int id, String nom, String prenom, String mail, String password, String profil_image, String numero) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.mail = mail;
         this.password = password;
         this.profile_image = profil_image;
+        this.numero = numero;
+    }
+
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     public int getId() {

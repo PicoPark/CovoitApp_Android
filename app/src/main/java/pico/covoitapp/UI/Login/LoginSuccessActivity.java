@@ -7,6 +7,7 @@ import android.util.Log;
 
 
 import pico.covoitapp.Utils.FireBaseHelper;
+import pico.covoitapp.Utils.Interface.Retrofit.IUser;
 import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.R;
 import pico.covoitapp.UI.DashboardActivity;
@@ -22,15 +23,19 @@ public class LoginSuccessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_success);
 
+        RetrofitHelper.getAllVoiture(null);
 
-        Log.e("covoitApp.LoginSuccess", "User image : " + RetrofitHelper.me.getProfil_image());
-
-
-            ImageManager.getInstance().DownloadImage(RetrofitHelper.me.getProfil_image(), new IImage() {
+        ImageManager.getInstance().DownloadImage(RetrofitHelper.me.getProfil_image(), new IImage() {
                 @Override
                 public void onFirebaseResult(boolean okay) {
-                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-                    startActivity(intent);
+                  RetrofitHelper.getAssociation(RetrofitHelper.me.getId(), new IUser() {
+                      @Override
+                      public void onRetrofitResult(boolean okay) {
+                          Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                          startActivity(intent);
+                      }
+                  });
+
                 }
             });
 

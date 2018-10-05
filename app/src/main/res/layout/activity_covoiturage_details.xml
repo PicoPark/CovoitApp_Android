@@ -136,7 +136,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="50dp"
                         android:background="@drawable/bt_shape_2"
-                        android:stateListAnimator="@drawable/state_list_animator_z"
                         android:text="Reserver"
                         android:textColor="#ffbe76" />
 
@@ -149,7 +148,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bt_shape_2"
-                        android:stateListAnimator="@drawable/state_list_animator_z"
                         android:text="Retour"
                         android:textColor="#ffbe76" />
                 </LinearLayout>

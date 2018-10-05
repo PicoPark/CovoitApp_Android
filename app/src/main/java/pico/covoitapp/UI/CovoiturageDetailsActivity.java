@@ -2,6 +2,7 @@ package pico.covoitapp.UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -65,6 +66,8 @@ public class CovoiturageDetailsActivity extends AppCompatActivity {
             finish();
 
 
+
+
         reserve.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -74,11 +77,14 @@ public class CovoiturageDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onRetrofitResult(boolean okay) {
                         if(okay){
+                            Log.e(TAG, "ok");
+
                             Toast.makeText(getApplicationContext(),"La demande de reservation a bien été faite, attendez la réponse du conducteur", Toast.LENGTH_LONG);
 
                         }else{
                             Toast.makeText(getApplicationContext(),"l y a eu une erreur lors de l'enregistrement",Toast.LENGTH_LONG);
                         }
+                        finish();
                     }
                 });
 

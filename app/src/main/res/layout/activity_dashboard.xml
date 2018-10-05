@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".UI.DashboardActivity">
 
+
+    <ImageButton
+        android:id="@+id/dashboard_btn_log_out"
+        android:layout_width="56dp"
+        android:layout_height="48dp"
+        android:layout_margin="14dp"
+        android:contentDescription="@string/depart"
+        android:src="@android:drawable/ic_lock_power_off"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="407dp"
@@ -15,6 +25,8 @@
         android:paddingStart="50dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
+
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/dashboard_image"
@@ -84,18 +96,19 @@
                     android:layout_height="wrap_content"
 
                     android:layout_alignParentTop="true"
-                    android:layout_marginEnd="-102dp"
-                    android:layout_marginTop="169dp"
+                    android:layout_marginTop="163dp"
+                    android:layout_marginEnd="-93dp"
                     android:layout_toStartOf="@+id/dashboard_tv_prenom"
                     android:text="Votre voiture "
                     android:textColor="@android:color/white" />
 
                 <TextView
                     android:id="@+id/dashboard_tv_voiture"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="-102dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="-284dp"
                     android:layout_toStartOf="@+id/dashboard_tv_prenom"
                     android:text="Clio II"
                     android:textColor="@android:color/white" />
@@ -110,7 +123,6 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="109dp"
                     android:background="@drawable/btn_shape3"
-                    android:stateListAnimator="@drawable/state_list_animator_z"
                     android:text="Modifier"
                     android:textColor="#ffffff" />
 

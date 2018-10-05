@@ -7,6 +7,7 @@ import java.util.List;
 
 import okhttp3.Request;
 
+import pico.covoitapp.Model.Api.MAssociation;
 import pico.covoitapp.Model.Api.MCovoiturage;
 import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.Model.Api.MVehicule;
@@ -41,14 +42,17 @@ public class RetrofitHelper {
     public static MUtilisateur me;
     public static Reservation mresa;
     public static MCovoiturage mCovoiturage;
+    public static MVehicule mVehicule;
     public static Boolean mailExist;
 
     public static void init() {
-        // Gson gson = new GsonBuilder( ).setDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ" ).create( );
+
         mListReservationsConducteur = new ArrayList<>();
         mListReservationsPassager = new ArrayList<>();
         mListVehicule = new ArrayList<>();
+
         mRetrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(BASE_URL).build();
+
         mCovoiturageChannel = mRetrofit.create(CovoiturageChannel.class);
         mUserChannel = mRetrofit.create(UserChannel.class);
         mReservationChannel = mRetrofit.create(ReservationChannel.class);
@@ -84,7 +88,8 @@ public class RetrofitHelper {
                 public void onResponse(Call<MUtilisateur> call, Response<MUtilisateur> response) {
                     if (response != null) {
                         MUtilisateur result = response.body();
-                        if (result != null) {
+                        if (result.getNom() != null) {
+                            Log.e(TAG, "result : " + response.message() +" " + response.body().getNumero());
                             me = result;
                             listener.onRetrofitResult(true);
                         } else {
@@ -155,6 +160,53 @@ public class RetrofitHelper {
 
     }
 
+    public static void getAssociation(int id, final IUser listener){
+
+        if (listener != null) {
+            RetrofitHelper.getmUserChannel().getAssociation(String.valueOf(id)).enqueue(new Callback<MVehicule>() {
+                @Override
+                public void onResponse(Call<MVehicule> call, Response<MVehicule> response) {
+                    if (response != null) {
+                        MVehicule channel = response.body();
+                        Log.e(TAG, response.message());
+                        if (channel != null) {
+                            mVehicule = channel;
+                            listener.onRetrofitResult(true);
+                        } else
+                            listener.onRetrofitResult(false);
+                    } else
+                        listener.onRetrofitResult(false);
+                }
+
+                @Override
+                public void onFailure(Call<MVehicule> call, Throwable t) {
+                    listener.onRetrofitResult(false);
+                }
+            });
+
+        }
+
+    }
+
+    public static void setAssociation(MAssociation association){
+       mVehicule = association.getVehicule();
+            RetrofitHelper.getmUserChannel().setAssociation(association).enqueue(new Callback<Void>() {
+
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+
+                }
+            });
+
+
+
+    }
+
     public static void getAllCovoiturages(MCovoiturage covoit, final ICovoiturage listener) {
         Request query = RetrofitHelper.getmCovoiturageChannel().getListCovoiturage(covoit).request();
         Log.e(TAG, "body : " + Tools.bodyToString(query));
@@ -188,10 +240,10 @@ public class RetrofitHelper {
 
     public static void getUserInfo(int id, final IUser listener) {
         Log.e(TAG, String.valueOf(id));
-        Request query = RetrofitHelper.getmUserChannel().getUserInfo("7").request();
+        Request query = RetrofitHelper.getmUserChannel().getUserInfo(String.valueOf(id)).request();
         Log.e(TAG, "body : " + query.url());
         if (listener != null) {
-            RetrofitHelper.getmUserChannel().getUserInfo("7").enqueue(new Callback<MUtilisateur>() {
+            RetrofitHelper.getmUserChannel().getUserInfo(String.valueOf(id)).enqueue(new Callback<MUtilisateur>() {
                 @Override
                 public void onResponse(Call<MUtilisateur> call, Response<MUtilisateur> response) {
                     if (response != null) {
@@ -266,31 +318,45 @@ public class RetrofitHelper {
     }
 
     public static void getAllVoiture(final IUser listener){
-        RetrofitHelper.getmUserChannel().getAllVehicule().enqueue(new Callback<List<MVehicule>>() {
-            @Override
-            public void onResponse(Call<List<MVehicule>> call, Response<List<MVehicule>> response) {
-                Log.e(TAG, "response : " + response.toString());
-                if (response != null) {
-                    List<MVehicule> channels = response.body();
+        if(mListVehicule.size() !=0){
+            if(listener != null) {
+                listener.onRetrofitResult(true);
+            }
+        }else {
+
+
+            RetrofitHelper.getmUserChannel().getAllVehicule().enqueue(new Callback<List<MVehicule>>() {
+                @Override
+                public void onResponse(Call<List<MVehicule>> call, Response<List<MVehicule>> response) {
                     Log.e(TAG, "response : " + response.toString());
-                    if (channels != null) {
-                        mListVehicule = channels;
-                        listener.onRetrofitResult(true);
+                    if (response != null) {
+                        List<MVehicule> channels = response.body();
+                        Log.e(TAG, "response : " + response.toString());
+
+                        if (channels != null) {
+                            mListVehicule = channels;
+                            if(listener != null) {
+                                listener.onRetrofitResult(true);
+                            }
+                        } else {
+                            if(listener != null) {
+                                listener.onRetrofitResult(false);
+                            }
+                        }
                     } else {
-                        listener.onRetrofitResult(false);
+                        if(listener != null) {
+                            listener.onRetrofitResult(false);
+                        }
                     }
-                } else {
-                    listener.onRetrofitResult(false);
-
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<MVehicule>> call, Throwable t) {
-                listener.onRetrofitResult(false);
-            }
+                @Override
+                public void onFailure(Call<List<MVehicule>> call, Throwable t) {
+                    listener.onRetrofitResult(false);
+                }
 
-        });
+            });
+        }
 
     }
 

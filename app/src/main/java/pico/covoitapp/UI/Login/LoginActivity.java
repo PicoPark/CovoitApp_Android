@@ -20,23 +20,30 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import pico.covoitapp.BusinessLogic.UtilisateurManager;
-import pico.covoitapp.Utils.FireBaseHelper;
-import pico.covoitapp.Utils.RetrofitHelper;
-import pico.covoitapp.Model.Api.MUtilisateur;
+import com.victor.loading.rotate.RotateLoading;
 import pico.covoitapp.R;
+import butterknife.BindView;
+
+import butterknife.OnClick;
+import butterknife.ButterKnife;
+
+import pico.covoitapp.BusinessLogic.UtilisateurManager;
+
+import pico.covoitapp.Model.Api.MUtilisateur;
+
 import pico.covoitapp.Utils.Interface.Retrofit.IUser;
+import pico.covoitapp.Utils.RetrofitHelper;
 
 public class LoginActivity extends AppCompatActivity{
+
+    @BindView(R.id.login_rotateloading)
+    RotateLoading loader;
 
     @BindView(R.id.et_username)
     AutoCompleteTextView etUsername;
     @BindView(R.id.et_password)
     EditText etPassword;
-    @BindView(R.id.bt_go)
+    @BindView(R.id.login_bt_go)
     Button btGo;
     @BindView(R.id.cv)
     CardView cv;
@@ -59,9 +66,30 @@ public class LoginActivity extends AppCompatActivity{
         askPermission();
 
 
+        btGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.e(TAG, "loader start");
+                loader.start();
+                RetrofitHelper.connect( new MUtilisateur(etUsername.getText().toString(),etPassword.getText().toString()), new IUser(){
+                    @Override
+                    public void onRetrofitResult(boolean okay) {
+                        if(okay){
+                            goToLoginSuccesAnimation();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Echec de connexion", Toast.LENGTH_LONG).show();
+                            loader.stop();
+                        }
+                    }
+                });
+            }
+        });
+
+
     }
 
-    protected void askPermission(){
+    protected void askPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -71,7 +99,7 @@ public class LoginActivity extends AppCompatActivity{
                     Manifest.permission.READ_CONTACTS)) {
 
             } else {
-                // No explanation needed; request the permission
+
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_CONTACTS},
                         0);
@@ -79,65 +107,37 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
+   @OnClick(R.id.fab)
+    public void onClickFab(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(null);
+            getWindow().setEnterTransition(null);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options =
+                    ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.getTransitionName());
+            startActivity(new Intent(this, RegisterActivity.class), options.toBundle());
+        } else {
+            startActivity(new Intent(this, RegisterActivity.class));
+        }
+
+
+    }
+
+
+    public void goToLoginSuccesAnimation(){
+        loader.stop();
+        Intent intent = new Intent(getApplicationContext(), LoginSuccessActivity.class);
+        startActivity(intent);
+
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-
+        etPassword.setText("");
+        etUsername.setText("");
     }
-
-    @OnClick({R.id.bt_go, R.id.fab})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.fab:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().setExitTransition(null);
-                    getWindow().setEnterTransition(null);
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptions options =
-                            ActivityOptions.makeSceneTransitionAnimation(this, fab, fab.getTransitionName());
-                    startActivity(new Intent(this, RegisterActivity.class), options.toBundle());
-                } else {
-                    startActivity(new Intent(this, RegisterActivity.class));
-                }
-
-                break;
-            case R.id.bt_go:
-
-                RetrofitHelper.connect( new MUtilisateur(etUsername.getText().toString(),etPassword.getText().toString()), new IUser(){
-                    @Override
-                    public void onRetrofitResult(boolean okay) {
-                        if(okay){
-                            goToLoginSuccesAnimation();
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Echec de connexion", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-
-               // userMng.connect(new UserLogin(etUsername.getText().toString(),etPassword.getText().toString()),checkboxStayConnected.isChecked());
-                break;
-        }
-    }
-
-    private void goToLoginSuccesAnimation() {
-
-        Intent intent = new Intent(getApplicationContext(), LoginSuccessActivity.class);
-        startActivity(intent);
-      //  Toast.makeText(getApplicationContext(),"connexion on" , )
-      // Explode explode = new Explode();
-
-      // getWindow().setExitTransition(explode);
-      // getWindow().setEnterTransition(explode);
-      // ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
-      // Intent i2 = new Intent(getApplicationContext(), LoginSuccessActivity.class);
-      // startActivity(i2, oc2.toBundle());
-      // explode.setDuration(500);
-
-    }
-
-
-
 }

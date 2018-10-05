@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.7'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
 
-    // Realm
+
 
     //Butterknife
     implementation 'com.jakewharton:butterknife:8.6.0'
@@ -46,11 +46,10 @@ dependencies {
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
-    //Diagonal Layout
-    implementation 'com.github.florent37:diagonallayout:1.0.6'
 
-    //Overwatch progress
+    //progress
     implementation 'com.github.zjywill:OverwatchProgress:1.5'
+    implementation 'com.victor:lib:1.0.4'
 
     //Circle Image
     implementation 'de.hdodenhof:circleimageview:2.1.0'

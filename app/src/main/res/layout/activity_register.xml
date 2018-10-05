@@ -159,7 +159,6 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bt_shape_2"
-                    android:stateListAnimator="@drawable/state_list_animator_z"
                     android:text="@string/register"
                     android:textColor="#ffbe76"></Button>
 
@@ -176,5 +175,11 @@
             app:fabSize="normal" />
     </FrameLayout>
 
-
+    <com.victor.loading.rotate.RotateLoading
+        android:id="@+id/register_rotateloading"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        app:loading_color="#ffffff"
+        app:loading_width="5dp" />
 </RelativeLayout>

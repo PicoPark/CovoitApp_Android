@@ -1,7 +1,10 @@
 package pico.covoitapp.UI;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +17,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pico.covoitapp.Model.Api.MAssociation;
+import pico.covoitapp.Utils.IImage;
+import pico.covoitapp.Utils.ImageManager;
 import pico.covoitapp.Utils.RetrofitHelper;
 import pico.covoitapp.Model.Api.MVehicule;
 import pico.covoitapp.R;
@@ -30,6 +36,9 @@ public class EditUtilisateurActivity extends AppCompatActivity {
     @BindView(R.id.edit_image)
     ImageView img;
 
+    @BindView(R.id.edit_fab)
+    FloatingActionButton exit;
+
     @BindView(R.id.edit_edit_email)
     EditText edit_email;
     @BindView(R.id.edit_edit_password)
@@ -44,6 +53,15 @@ public class EditUtilisateurActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_utilisateur);
         ButterKnife.bind(this);
+
+        ImageManager.getInstance().DownloadImage(RetrofitHelper.me.getProfil_image(), new IImage() {
+            @Override
+            public void onFirebaseResult(boolean okay) {
+              img.setImageBitmap(ImageManager.getInstance().getImage());
+
+            }
+        });
+
 
         edit_email.setText(RetrofitHelper.me.getMail());
         edit_firstname.setText(RetrofitHelper.me.getPrenom());
@@ -73,6 +91,11 @@ public class EditUtilisateurActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.edit_fab)
+    public void onClickExit(){
+        finish();
+    }
+
     @OnClick(R.id.edit_bt_go)
     public void onClickGo(){
         RetrofitHelper.me.setMail(edit_email.getText().toString());
@@ -86,6 +109,11 @@ public class EditUtilisateurActivity extends AppCompatActivity {
             @Override
             public void onRetrofitResult(boolean okay) {
                 if(okay)
+                    Log.e("covoitApp.edit", "spinner : " + spinner.getSelectedItemPosition());
+                Log.e("covoitApp.edit", "spinner : " +RetrofitHelper.mListVehicule.get(spinner.getSelectedItemPosition()).getMarque());
+                    RetrofitHelper.setAssociation(
+                            new MAssociation(RetrofitHelper.mListVehicule.get(spinner.getSelectedItemPosition()),
+                                    RetrofitHelper.me));
                     finish();
             }
         });

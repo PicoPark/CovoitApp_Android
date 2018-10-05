@@ -3,6 +3,7 @@ package pico.covoitapp.Utils.Interface.Retrofit;
 import java.util.ArrayList;
 import java.util.List;
 
+import pico.covoitapp.Model.Api.MAssociation;
 import pico.covoitapp.Model.Api.MUtilisateur;
 import pico.covoitapp.Model.Api.MVehicule;
 import pico.covoitapp.Model.Api.UserInfo;
@@ -39,10 +40,10 @@ public interface UserChannel {
     Call<List<MVehicule>> getAllVehicule();
 
     @POST("Association")
-    Call<Void> setAssociation();
+    Call<Void> setAssociation(@Body MAssociation association);
 
     @DELETE("Association")
-    Call<Void> deleteAssociation();
+    Call<Void> deleteAssociation(MAssociation association);
 
     @GET("Association/{id}")
     Call<MVehicule> getAssociation(@Path("id") String id);

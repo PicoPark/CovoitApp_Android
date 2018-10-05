@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -47,6 +48,9 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.search_lv_covoiturage)
     ListView lvCovoiturage;
 
+    @BindView(R.id.search_tv_empty)
+    TextView tvEmpty;
+
     private List<MCovoiturage> covoiturageList = null;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -57,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
-
+        tvEmpty.setVisibility(View.INVISIBLE);
 
 
         searchButton.setOnClickListener(new View.OnClickListener(){
@@ -77,10 +81,12 @@ public class SearchActivity extends AppCompatActivity {
                             public void onRetrofitResult(boolean okay) {
                                 if(okay){
                                     if(lvCovoiturage != null){
+                                        tvEmpty.setVisibility(View.INVISIBLE);
                                         BaseAdapter sa = new CovoiturageAdapter(RetrofitHelper.mListCovoiturages, getApplicationContext());
                                         lvCovoiturage.setAdapter(sa);
                                         sa.notifyDataSetChanged();
                                     }else{
+                                        tvEmpty.setVisibility(View.VISIBLE);
                                         Toast.makeText(getApplicationContext(),"Erreur", Toast.LENGTH_LONG).show();
                                         Log.e(TAG, "List null");
                                     }

@@ -26,9 +26,6 @@ import pico.covoitapp.Utils.Tools;
 
 public class AddActivity extends AppCompatActivity {
 
-
-    @BindView(R.id.add_fab)
-    FloatingActionButton fab;
     @BindView(R.id.add_edit_ville_depart)
     EditText edDepart;
     @BindView(R.id.add_edit_ville_arrive)
@@ -77,6 +74,7 @@ public class AddActivity extends AppCompatActivity {
             public void onRetrofitResult(boolean okay) {
                 if (okay){
                     goToDetailsActivity(RetrofitHelper.mCovoiturage);
+                    finish();
                 }else {
                     Toast.makeText(getApplicationContext(), "Erreur", Toast.LENGTH_LONG);
                 }

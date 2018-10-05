@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.victor.loading.rotate.RotateLoading;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +37,9 @@ import pico.covoitapp.Utils.Interface.Retrofit.IUser;
 
 
 public class RegisterActivity extends AppCompatActivity {
+
+    @BindView(R.id.register_rotateloading)
+    RotateLoading loader;
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -183,7 +187,7 @@ public class RegisterActivity extends AppCompatActivity {
         animateRevealClose();
     }
     private void addUer(){
-Log.e(TAG, "click");
+        Log.e(TAG, "click");
         Log.e(TAG,"isPhotoTaked " + isPhotoTaked);
         if(!isPhotoTaked){
 
@@ -193,7 +197,7 @@ Log.e(TAG, "click");
             Toast.makeText(getApplicationContext(),"Nous avons besoin d'une photo de profil",Toast.LENGTH_SHORT).show();
 
         }else{
-
+            loader.start();
             Log.e(TAG,"Verification");
             RetrofitHelper.verification(edit_email.getText().toString(), new IUser() {
                 @Override
@@ -209,6 +213,7 @@ Log.e(TAG, "click");
                       me.setNom(edit_lastname.getText().toString());
                       me.setPassword(edit_password.getText().toString());
                       me.setProfil_image(edit_email.getText().toString() + ".jpg");
+                      me.setNumero(edit_numero.getText().toString());
                      final MUtilisateur tmp = me;
                         RetrofitHelper.me = tmp;
                         Log.e(TAG, "User créer : " + me.getProfil_image());
@@ -221,6 +226,7 @@ Log.e(TAG, "click");
                                         @Override
                                         public void onRetrofitResult(boolean okay) {
                                             if(okay) {
+                                                loader.stop();
                                                 Log.e(TAG, "User image : " + RetrofitHelper.me.getProfil_image());
                                                 Toast.makeText(getApplicationContext(), "Votre compte a bien été créer", Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(getBaseContext(), LoginSuccessActivity.class);

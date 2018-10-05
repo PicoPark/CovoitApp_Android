@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 
 
 import okhttp3.Request;
+import okhttp3.Response;
 import okio.Buffer;
 import pico.covoitapp.Model.Api.MCovoiturage;
 
@@ -24,6 +25,8 @@ public class Tools {
         }
 
     }
+
+
     private static String checkDateFormat(int value){
         String tmpD = String.valueOf( value);
         if(value <10)
